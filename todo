@@ -1,0 +1,50 @@
+TODO
+
+next
+
+max
+min
+range
+
+error
+
+
+
+error format
+
+{
+	"result" : true
+	"errors" : [
+		{
+
+		},
+		{
+
+		},
+	]
+	"error" : {},
+	"ajax" : [],
+	"success" : [],
+}
+
+{
+	"result" : true
+	
+	"errors" : {
+		"name" : [
+			{
+			"errors" : [
+				{
+		
+				},
+				{
+		
+				},
+			]
+			"error" : {},
+			"ajax" : [],
+			"success" : [],
+			}
+		]
+	}
+}

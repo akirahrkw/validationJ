@@ -1,0 +1,400 @@
+validationJ provides a validation system, a library of jQuery plug-in.
+
+it's prety easy to use it!!!
+just attach validation methods, like $('#test').required().maxlength(100).url();
+
+Demo1: http://www.akirahrkw.com/VJsample1.html
+Demo2: http://www.akirahrkw.com/VJsample2.html
+
+additional support
+ to add custom validation rule.
+ to call the validation method which needs ajax request.
+ to manage dynamic message format
+
+not support
+ to output a message, this plugin just validates forms and makes the results.
+
+
+0. Requirement
+ this library requires jQuery.
+ this library was developed by jquery-1.4.4.js
+
+1. Initialization
+
+ VJ.init({/* object */});
+ but if you don't need to set options, no need to call this method.
+ please check section.3 (option format section) for the option's detail.
+
+2. attachment
+
+2.1 how to attach
+ it's pretty easy to attach validation rule to form field.
+ assume that you have a text form field <input type="text" id="test" name="test" />
+ 
+ you can attach a validation rule, like this, $('#test').required();
+
+2.2 continuous attach
+ of course this plug-in is based on the chain style, so you can do it continuously.
+ $('#test').required().maxlength(10).minlength(5);
+
+2.3 once method
+ by default, this plug-in tries to execute all validate methods you attached and return error messages.
+ but if you attached once method, when this plug-in find a error,it stops to validate. then the error message is returned
+ $('#test').required().maxlength(10).minlength(5).once();
+	
+2.4 validation by form tag type 
+
+there are several form types, text,textarea,select and so on.
+this plug-in supports multi form types.
+
+but whether the plug-in support each type, it's depends on which method do you attach.
+ex: required() supports all form types. but email() supports only input,textarea form type.
+please check the each validation method's explanation.
+
+3 option
+
+3.1 how to set option
+as I describe the one of that how to set a option in previous section,there are also two ways to set option.
+	1: call options method
+	 $('#test').options({/* option */});
+
+	2: set option as a parameter in each validation method call
+	 $('#test').required({/* option */});
+
+3.2 priority
+
+if you set same option key by several ways,the priority is 1 < 2 < 3
+ ex) 
+ 	1: VJ.init({/* object */}); 
+ 	2: $('#test').options({/* option */}); 
+ 	3: $('#test').required({/* option */});
+  
+3.3 default option
+
+	 {
+		error_msg_format 	: "error",
+		success_msg_format  : "ok",
+		ajax_msg_format 	: "connecting server...",
+		message : {
+			required : {
+				error_msg_format : "required"
+			},
+			maxlength : {
+				error_msg_format : "less than ${1} words"
+			},
+			minlength : {		
+				error_msg_format : "more than ${1} words"
+			},
+			between : {	
+				error_msg_format : "between ${1} and ${2} words"
+			},
+			max : {
+				error_msg_format : "less than ${1}"
+			},
+			min : {		
+				error_msg_format : "more than ${1}"
+			},
+			range : {	
+				error_msg_format : "between ${1} and ${2}"
+			},
+			email : {
+				error_msg_format : "invalid Email"
+			},
+			url : {
+				error_msg_format : "invalid url"
+			},
+			numeric : {
+				error_msg_format : "not number"
+			},
+			alpha : {
+				error_msg_format : "not alphabet"
+			},
+			alphaNumeric : {
+				error_msg_format : "not alphabet or number"
+			},
+			equal : {
+				error_msg_format : "not qeual"
+			},
+			ajaxv : {
+				ajax_msg_format : "connecting server..."
+			}
+		}
+	};
+
+3.4 Overwrite default option in VJ.init
+  
+	VJ.init({
+		success_msg_format : "GOOOOOOOOOOOOOOOD!!!!",
+		message : {
+			required : {
+				error_msg_format : "this column is requred!!!!!"
+			}
+		}
+	});
+ 
+3.5 set option in each validation method
+ 
+valid options are
+ name    : the form name to display which the validation method is attached to , default form name is "name attribute"
+ priority: it is to decide the order to validate, default setting is first-attach-first-out
+ success_msg_format : success message
+ error_msg_format   : error message
+ ajax_msg_format    : ajax message
+ 
+ $('#test').options({"name" : "required test1","success_msg_format" : "GOOD1", "error_msg_format" : "${0} is required!!"})
+ $('#test').required({"priority":1, "name" : "required test2","success_msg_format" : "GOOD2", "error_msg_format" : "${0} is required!!"})
+ 
+3.6 replacement
+
+as you might want to output the error message dynamically,at such time you can use ${} declare.
+for example, if you set a message as "${0} is required", ${0} will be changed to the specified name automatically.
+if validation method needs parameters like a maxlength(20), you can use ${1}. if more than two parameters, you can use ${2},${3},,,
+
+4.core validation
+
+4.1 supported method list
+
+ required  : the data for the form field must not be empty.
+ maxlength : the length of the data for the form field must be more than a specified numeric.
+ minlength : the length of the data for the form field must be less than a specified numeric.
+ between   : the length of the data for the form field must fall within a specified numeric range. both minimum and maximum values must be supplied 
+ max 	   : the data for the form field must be a numbers and more than a specified numeric.
+ min	   : the data for the form field must be a numbers and less than a specified numeric.
+ range	   : the data for the form field must fall within a specified numeric range.both minimum and maximum values must be supplied  
+ email	   : the data for the form field must be a valid email address.
+ url 	   : the data for the form field must be a valid URL.
+ alpha 	   : the data for the form field must only contain letters
+ numeric	  : the data for the form field must only contain numbers
+ alphaNumeric : the data for the form field must only contain letters and numbers
+ equal 	   : the data for the form field is equal to specified data
+ ajaxv 	   : the validation of the data for the form field is depends on a ajax response.
+ 
+4.2 required
+
+ rule : the data for the form field must not be empty
+ style: .required([options])
+ valid types: text,textarea,checkbox,radio,select
+ ex: $('#test').required();
+ 
+4.3 maxlength 
+
+ rule : the length of the data for the form field must be more than a specified numeric.
+ style: .maxlength(value[,options])
+ valid types: text,textarea,checkbox,select
+ ex : $('#test').maxlength(10); or $('#test').maxlength(10,options);
+
+4.4 minlength 
+ rule : the length of the data for the form field must be less than a specified numeric.
+ style: .minlength(value[,options])
+ valid types: text,textarea,checkbox,select
+ ex : $('#test').minlength(10); or $('#test').minlength(10,options);
+
+4.5 between 
+ rule : the length of the data for the form field must fall within a specified numeric range. both minimum and maximum values must be supplied 
+ style: .between(min,max[,options])
+ valid types: text,textarea,checkbox,select
+ ex : $('#test').between(5,10); or $('#test').between(5,10,options);
+
+4.6 max 
+ rule : the data for the form field must be a numbers and more than a specified numeric.
+ style: .max(value[,options])
+ valid types: text
+ ex : $('#test').max(10); or $('#test').max(10,options);
+
+4.7 min 
+ rule : the data for the form field must be a numbers and less than a specified numeric.
+ style: .min(value[,options])
+ valid types: text
+ ex : $('#test').min(10); or $('#test').min(10,options);
+
+4.8 range 
+ rule : the data for the form field must fall within a specified numeric range.both minimum and maximum values must be supplied  
+ style: .range(min,max[,options])
+ valid types: text
+ ex : $('#test').range(5,10); or $('#test').range(5,10,options);
+
+4.9 email 
+ rule : the data for the form field must be a valid email address.
+ style: .range([pattern,options])
+ valid types: text,textarea
+ 
+ ex : $('#test').email(); or $('#test').email(new RegExp("^https?:\/\/.+$", "i"));
+  	  also this style is valid
+  	  $('#test').email({"pattern" : new RegExp("^https?:\/\/.+$", "i"), "error_msg_format" : "hey!! this is invalid email!!"})
+	  if you don't set email pattern, default pettern is used
+ 
+ default pattern match : 
+	 value.match(/[0-9a-zA-Z\._\-\+]+@[0-9a-zA-Z_\-]+(\.[0-9a-zA-Z_\-]+){1,}/i)
+
+4.10 url 
+ rule : the data for the form field must be a valid URL.
+ style: .range([pattern,options])
+ valid types: text,textarea
+ ex : $('#test').url(); or $('#test').url(new RegExp("^https?:\/\/.+$", "i"));
+ if you don't set url pattern, default pettern is used
+ 
+ default pattern match : 
+	 value.match(/^https?:\/\/.+\..+$/i)
+
+4.11 alpha 
+ rule : the data for the form field must only contain letters
+ style: .alpha([options])
+ valid types: text,textarea
+ ex : $('#test').alpha(); or $('#test').alpha(options);
+
+4.12 numeric 
+ rule : the data for the form field must only contain numbers
+ style: .numeric([options])
+ valid types: text,textarea
+ ex : $('#test').numeric(); or $('#test').numeric(options);
+
+4.13 alphaNumeric 
+ rule : the data for the form field must only contain letters and numbers
+ style: .alphaNumeric([options])
+ valid types: text,textarea
+ ex : $('#test').alphaNumeric(); or $('#test').alphaNumeric(options);
+
+4.14 equal 
+ rule : the data for the form field is equal to specified data
+ style: .equal(target[,options])
+ valid types: text
+ ex : $('#test').equal($("#test2")); or $('#test').equal($("#test2"),options);
+
+4.15 ajaxv 
+ rule : the validation of the data for the form field is depends on a ajax response.
+ style: .ajaxv(ajaxparams[,options])
+ valid types: text
+ ex : $('#test').ajaxv(ajaxparams); or $('#test').ajaxv(ajaxparams,options);
+ see section 8 if you need more detail.
+
+5 validate
+
+5.1 call validate method
+ 
+5.1.1 validate individual items
+
+ var result = $("input[name=prop2]").required().validate();
+
+ simple result format
+ {
+  status : VJ.SUCCESS | VJ.FAIL | VJ.AJAX,
+  message :  "text",
+  error : { /* message object */ },
+  results : {
+  	successes : [/* message object */]
+	errors	  :	[/* message object */]
+	ajaxes 	  : [/* message object */]
+  }
+ }
+
+ message object format
+ {
+  method  : "validation method name"
+  status  : VJ.SUCCESS | VJ.FAIL | VJ.AJAX,
+  message : "text"
+ }
+
+ if errors length is 1, automatically errors[0] is attached to error
+	
+5.1.2 validate all
+
+ var results = $.validate();
+
+ complex result format
+ {
+  status : VJ.SUCCESS | VJ.FAIL | VJ.AJAX,
+  message : "text",
+  names : {
+	"form name" : simple result format
+	,,,
+	,,,
+  }
+ }
+
+5.2 other methods
+
+$.hasErrorsAndAjax()
+ response: true or false
+ if there are errors or ajax validation waiting for server response, true is returned
+
+$.hasErrors()
+ response: true or false
+ if there are errors, true is returned
+
+.errors()
+ response: error object array
+
+ error object format
+ {
+  method : "validation method name"
+  status : VJ.SUCCESS | VJ.FAIL | VJ.AJAX,
+  message : "text"
+ }
+ 
+.hasError()
+ response: true or false
+ if there are errors, true is returned
+ 
+.hasAjax()
+ response: true or false
+ if there are ajax validation waiting for server response, true is returned
+ 
+.hasErrorAndAjax()
+ response: true or false
+ if there are errors or ajax validation waiting for server response, true is returned
+
+6. in practice
+please check the files.
+
+7 ajax validation
+you can validate a data by using ajax. maybe unique user id check.
+
+.ajaxv(ajaxparams)
+the ajaxparams is same as the parameter you set when you call .ajax()
+but in callback function, you have to tell the validationJ about status change
+
+from AJAX status to SUCCESS or FAIL status.
+ex: .ajaxvmsg(VJ.SUCCESS);
+
+8 extend
+
+you can add validation method you want.
+
+8.1 add validation
+
+first param is method name.
+second param is validation method object.
+
+ex:
+VJ.addvalidation("test",{
+	text: function(pjobj, jobj, value, params)
+	{
+		value = (value == null) ? jobj.val() : value;
+		if (value == null || value == "") {
+			return VJ.SUCCESS;
+		}else if (value.match(/^123$/i)) {
+			return VJ.SUCCESS;
+		}
+		return VJ.FAIL;
+	},
+	textarea: function(pjobj, jobj, value, params)
+	{
+	
+	},
+	checkbox:,,,
+	radio:,,,
+	select:,,,
+});
+
+you might confuse the validation method object,actually it's easy to understand.
+if you want to support text type, you have to add text function into the object.
+also if checkbox, add checkbox function into the object.
+
+each function's parameter
+pjobj: this is a jquery object of the element set you specified
+jobj : this is a jquery object of the each element of pjobj
+
+8.2 attach
+assume that you add test method,
+$("input[name=text1]").test({params : [], opts : {}})
+
