@@ -1,19 +1,18 @@
-validationJ provides a validation system, a library of jQuery plug-in.
+validationJ which is the library of jQuery plug-in provides a validation system.
 
-it's prety easy to use it!!!
 just attach validation methods, like $('#test').required().maxlength(100).url();
 
-Demo1: http://www.akirahrkw.com/VJsample1.html
-Demo2: http://www.akirahrkw.com/VJsample2.html
+Demo1: http://www.akirahrkw.com/validationjsample/sample.html
+Demo2: http://www.akirahrkw.com/validationjsample/sample2.html
 
-additional support
- to add custom validation rule.
- to call the validation method which needs ajax request.
+support
+ to use built-in validation methods
+ to add custom validation rule
+ to call the validation method which needs ajax request
  to manage dynamic message format
 
 not support
- to output a message, this plugin just validates forms and makes the results.
-
+ to output a message, this plugin just validates forms and makes the result data sets
 
 0. Requirement
  this library requires jQuery.
