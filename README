@@ -262,9 +262,13 @@ if validation method needs parameters like a maxlength(20), you can use ${1}. if
 4.15 ajaxv 
  rule : the validation of the data for the form field is depends on a ajax response.
  style: .ajaxv(ajaxparams[,options])
+ 	the ajaxparams is same as the parameter you set when you call .ajax()
  valid types: text
  ex : $('#test').ajaxv(ajaxparams); or $('#test').ajaxv(ajaxparams,options);
- see section 8 if you need more detail.
+
+ but when you get a response from a server, you should tell the validationJ about a status change in the .ajax callback function
+ because this library keep the validation status as VJ.AJAX, so you have to change it to VJ.SUCCESS or VJ.FAIL
+ ex: .ajaxvmsg(VJ.SUCCESS);
 
 5 validate
 
@@ -343,23 +347,15 @@ $.hasErrors()
  if there are errors or ajax validation waiting for server response, true is returned
 
 6. in practice
-please check the files.
+please check these files.
+http://www.akirahrkw.com/validationjsample/sample.js for http://www.akirahrkw.com/validationjsample/sample.html
+http://www.akirahrkw.com/validationjsample/sample2.js for http://www.akirahrkw.com/validationjsample/sample2.html
 
-7 ajax validation
-you can validate a data by using ajax. maybe unique user id check.
-
-.ajaxv(ajaxparams)
-the ajaxparams is same as the parameter you set when you call .ajax()
-but in callback function, you have to tell the validationJ about status change
-
-from AJAX status to SUCCESS or FAIL status.
-ex: .ajaxvmsg(VJ.SUCCESS);
-
-8 extend
+7 extend
 
 you can add validation method you want.
 
-8.1 add validation
+7.1 add validation
 
 first param is method name.
 second param is validation method object.
@@ -393,7 +389,7 @@ each function's parameter
 pjobj: this is a jquery object of the element set you specified
 jobj : this is a jquery object of the each element of pjobj
 
-8.2 attach
+7.2 attach
 assume that you add test method,
 $("input[name=text1]").test({params : [], opts : {}})
 
