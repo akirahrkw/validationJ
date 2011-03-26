@@ -1,3 +1,12 @@
+/**
+ * validationJ JavaScript Library
+ * 
+ * Copyright (C) 2011 Akira Hirakawa
+ * Licensed under the MIT license
+ * Date: 2011-03-25
+ * @author Akira Hirakawa <http://www.akirahrkw.com>
+ * @version 1.0.0
+ */
 var VJ = (function(jQuery){
 	
 	var opts = {
